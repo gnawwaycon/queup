@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const mountMiddleware = require('./config/middleware');
 const mountRoutes = require('./config/routes');
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 require('./config/sequelize')
 require('./config/passport')
