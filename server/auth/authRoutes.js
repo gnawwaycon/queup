@@ -8,7 +8,7 @@ const mountAuthRoutes = app => {
     app.get('/api/auth/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
     function(req, res) {
-      console.log('ME HERE');
+      console.log('ME HERE', req.user);
       res.redirect('/');
     });
 }
