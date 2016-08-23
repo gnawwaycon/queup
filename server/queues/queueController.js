@@ -3,7 +3,7 @@ const Queue = require('./queueModel')
 
 module.exports = {
   enqueue,
-  // dequeue
+  dequeue
 };
 
 function enqueue(req, res) { //signing up for a queue
