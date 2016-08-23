@@ -3,7 +3,7 @@ const Queue = require('./queueModel')
 
 module.exports = {
   enqueue,
-  dequeue
+  // dequeue
 };
 
 function enqueue(req, res) { //signing up for a queue
@@ -18,8 +18,9 @@ function enqueue(req, res) { //signing up for a queue
   .then(() => { res.status(200).end(); })
   .catch((err) => { console.log(err); });
 }
-//
-// function dequeue(req, res) { //getting a text messsage for done
+
+function dequeue(req, res) { //getting a text messsage for done
+console.log(req)
 //   inQueue.findOne({
 //     where: { lineName: req.line }
 //   })
