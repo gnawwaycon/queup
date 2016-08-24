@@ -48,11 +48,26 @@ function stats(req, res) {
 function dequeue(req, res) { //getting a text messsage for done
 console.log(req.body)
   Inqueue.findOne({
-    where: { lineName: req.body.from }
+    where: { userNumber: req.body.From }
   }).then(completed => {
-    completed.destroy();
-    console.log(completed)
+    if(completed) {
+      var line = completed.dataValues.lineName
+      console.log("completed", completed)
+      completed.destroy();
+      Queue.findOne({where: {lineName:line}})
+      .then(item => {
+        if(item) {
+          Inqueue.create(item.dataValues);;
+          item.destroy()
+          // sendMessag
+        }
+      })
+    } else {
+      // sendMessag
+    }
   })
+  .then(() => { res.sendStatus(200); })
+  .catch((err) => { console.log(err); });
 //   .then(person => {//find next person in queue for line
 //     notify(person)
 //   })
@@ -66,3 +81,7 @@ console.log(req.body)
 //   person.destroy()
 
 // }
+
+function sendMessage(string, number) {
+
+}
