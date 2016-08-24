@@ -1,5 +1,5 @@
 const Queue = require('./queueModel')
-const Inqueue = require('./inQueueModel')
+const Inqueue = require('./inqueueModel')
 const Promise = require('bluebird')
 
 module.exports = {
