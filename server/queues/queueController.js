@@ -47,7 +47,7 @@ function stats(req, res) {
 
 function dequeue(req, res) { //getting a text messsage for done
 console.log(req.body)
-  inQueue.findOne({
+  Inqueue.findOne({
     where: { lineName: req.body.from }
   }).then(completed => {
     completed.destroy();
