@@ -1,16 +1,10 @@
 const Queue = require('./queueModel')
 const Inqueue = require('./inqueueModel')
 const Promise = require('bluebird')
+const twillioSID = process.env.TWILLIO_SID;
+const twillioToken = process.env.TWILLIO_TOKEN;
 
-
-var client = require('twilio')(process.env.TWILLIO_SID, process.env.TWILLIO_TOKEN);
-
-
-module.exports = {
-  enqueue,
-  dequeue,
-  stats
-};
+const client = require('twilio')(twillioSID, twillioToken);
 
 function enqueue(req, res) { //signing up for a queue
   Queue.create({
@@ -27,7 +21,6 @@ function enqueue(req, res) { //signing up for a queue
   })
   .spread((waiting, inqueue) => {
     if(inqueue.count < waiting.capacity) {
-      // use waiting here
       console.log(waiting);
       return Promise.all([waiting, Inqueue.create(waiting.dataValues)])
         .spread((waiting, created) => {
@@ -41,8 +34,8 @@ function enqueue(req, res) { //signing up for a queue
   })
   // if findall inqueue < capacity //if there are less than capacity inququed then notifiy and remove from queue
   // notify person
-  .then(() => { res.sendStatus(200); })
-  .catch((err) => { console.log(err); });
+  .then(() => res.sendStatus(200))
+  .catch((err) => res.status(500).json(err));
 }
 
 function stats(req, res) {
@@ -50,29 +43,26 @@ function stats(req, res) {
 }
 
 function dequeue(req, res) { //getting a text messsage for done
-console.log(req.body)
   Inqueue.findOne({
     where: { userNumber: req.body.From }
   }).then(completed => {
-    if(completed) {
+    if (completed) {
       var line = completed.dataValues.lineName
-      console.log("completed", completed)
-      completed.destroy();
-      Queue.findOne({where: {lineName:line}})
-      .then(item => {
-        if(item) {
-          Inqueue.create(item.dataValues);;
-          sendMessage(`Hello ${item.dataValues.id} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber)
-          item.destroy()
-          // sendMessag
-        }
-      })
-    } else {
-      // sendMessag
+      return Promise.all([Queue.findOne({where: { lineName:line }}), completed.destroy()])
+        .spread(item => {
+          if(item) {
+            return Promise.all([
+              Inqueue.create(item.dataValues),
+              sendMessage(`Hello ${item.dataValues.id} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber),
+              item.destroy()
+            ])
+          }
+        })
     }
+    // text message would go here
   })
-  .then(() => { res.sendStatus(200); })
-  .catch((err) => { console.log(err); });
+  .then((results) => res.sendStatus(200))
+  .catch((err) => res.status(500).json(err));
 //   .then(person => {//find next person in queue for line
 //     notify(person)
 //   })
@@ -108,3 +98,9 @@ function sendMessage(message, number) {
       }
   });
 }
+
+module.exports = {
+  enqueue,
+  dequeue,
+  stats
+};
