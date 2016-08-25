@@ -3,7 +3,7 @@ const Inqueue = require('./inqueueModel')
 const Promise = require('bluebird')
 
 
-var client = require('twilio')(TWILLIO_SID, TWILLIO_TOKEN);
+var client = require('twilio')(process.env.TWILLIO_SID, process.env.TWILLIO_TOKEN);
 
 
 module.exports = {
