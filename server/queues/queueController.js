@@ -2,6 +2,10 @@ const Queue = require('./queueModel')
 const Inqueue = require('./inqueueModel')
 const Promise = require('bluebird')
 
+
+var client = require('twilio')(TWILLIO_SID, TWILLIO_TOKEN);
+
+
 module.exports = {
   enqueue,
   dequeue,
@@ -58,6 +62,7 @@ console.log(req.body)
       .then(item => {
         if(item) {
           Inqueue.create(item.dataValues);;
+          sendMessage(`Hello ${item.dataValues.id} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber)
           item.destroy()
           // sendMessag
         }
@@ -82,6 +87,24 @@ console.log(req.body)
 
 // }
 
-function sendMessage(string, number) {
+function sendMessage(message, number) {
+  client.sendMessage({
 
+      to: number, // Any number Twilio can deliver to
+      from: "+16262473389", // A number you bought from Twilio and can use for outbound communication
+      body: message // body of the SMS message
+
+  }, function(err, responseData) { //this function is executed when a response is received from Twilio
+
+      if (!err) { // "err" is an error received during the request, if any
+
+          // "responseData" is a JavaScript object containing data received from Twilio.
+          // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+          // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+
+          console.log(responseData.from); // outputs "+14506667788"
+          console.log(responseData.body); // outputs "word to your mother."
+
+      }
+  });
 }
