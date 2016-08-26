@@ -15,6 +15,11 @@ const mountAuthRoutes = app => {
   app.get('/main', function(req, res){
     res.send(req.user)
   });
+
+  app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 }
 
 module.exports = mountAuthRoutes;
