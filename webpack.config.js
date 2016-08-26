@@ -1,19 +1,23 @@
-module.exports = {
-  entry: __dirname + '/client/src',
+var path = require('path');
+
+var APP_DIR = path.resolve(__dirname, 'client/src');
+var BUILD_DIR = path.resolve(__dirname, 'client/build');
+
+var config = {
+  entry: APP_DIR + '/index.js',
   output: {
-    path: __dirname +'/compiled',
-    filename: "bundle.js"
+    path: BUILD_DIR+ '/static/js',
+    filename: 'bundle.js'
   },
-  module: {
-    loaders: [
-      { test: /.jsx?$/,
-        loader: "babel-loader",
-        exclude: 'node_modules, server, compiled',
-        query: {
-          presets: ['es2015', 'react']
-        }
-      }
-    ]
-  },
-  devtool: 'sourcemap'
+  module : {
+   loaders : [
+     {
+       test : /\.jsx?/,
+       exclude: /node_modules/,
+       loader : 'babel'
+     }
+   ]
+ }
 };
+
+module.exports = config;
