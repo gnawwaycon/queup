@@ -5,17 +5,16 @@ const mountAuthRoutes = app => {
     function(req, res){
     });
 
-    app.get('/api/auth/callback',
+  app.get('/api/auth/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
     function(req, res) {
       console.log('ME HERE', req.user);
       res.redirect('/');
     });
 
-    app.get('/', function(req, res){
-      res.send(req.user)
-    });
-});
+  app.get('/', function(req, res){
+    res.send(req.user)
+  });
 }
 
 module.exports = mountAuthRoutes;
