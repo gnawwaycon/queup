@@ -11,18 +11,18 @@ const mountAuthRoutes = app => {
       res.redirect('/');
     });
 
-    app.get('/main', ensureAuthenticated, function(req, res){
+    app.get('/', ensureAuthenticated, function(req, res){
       res.render('account', { user: req.user });
     });
 
     app.get('/logout', function(req, res){
       req.logout();
-      res.redirect('/');
+      res.logout('/');
     });
 
     function ensureAuthenticated(req, res, next) {
         if (req.isAuthenticated()) { return next(); }
-    res.redirect('/')
+    res.redirect('/api/auth')
   }
 
 }

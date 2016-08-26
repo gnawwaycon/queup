@@ -10,6 +10,7 @@ function enqueue(req, res) { //signing up for a queue
   Queue.create({
     userNumber: req.body.phone,
     userID: req.body.id,
+    userName: req.body.name,
     lineName: req.body.line,
     capacity: req.body.capacity,
   })
@@ -22,6 +23,7 @@ function enqueue(req, res) { //signing up for a queue
   .spread((waiting, inqueue) => {
     if(inqueue.count < waiting.capacity) {
       console.log(waiting);
+      sendMessage(`Hello ${waiting.dataValues.name} it is your spot in the line, please reply when you are done`, waiting.dataValues.userNumber),
       return Promise.all([waiting, Inqueue.create(waiting.dataValues)])
         .spread((waiting, created) => {
           return waiting.destroy();
@@ -38,9 +40,7 @@ function enqueue(req, res) { //signing up for a queue
   .catch((err) => res.status(500).json(err));
 }
 
-function stats(req, res) {
 
-}
 
 function dequeue(req, res) { //getting a text messsage for done
   Inqueue.findOne({
@@ -53,7 +53,7 @@ function dequeue(req, res) { //getting a text messsage for done
           if(item) {
             return Promise.all([
               Inqueue.create(item.dataValues),
-              sendMessage(`Hello ${item.dataValues.id} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber),
+              sendMessage(`Hello ${item.dataValues.name} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber),
               item.destroy()
             ])
           }
@@ -76,6 +76,10 @@ function dequeue(req, res) { //getting a text messsage for done
 //   person.destroy()
 
 // }
+function stats(user) {
+
+}
+
 
 function sendMessage(message, number) {
   client.sendMessage({
