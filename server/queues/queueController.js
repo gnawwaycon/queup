@@ -53,7 +53,7 @@ function dequeue(req, res) { //getting a text messsage for done
           if(item) {
             return Promise.all([
               Inqueue.create(item.dataValues),
-              sendMessage(`Hello ${item.dataValues.name} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber),
+              sendMessage(`Hello ${item.dataValues.userName} it is your spot in the line, please reply when you are done`, item.dataValues.userNumber),
               item.destroy()
             ])
           }
