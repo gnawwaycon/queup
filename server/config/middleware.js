@@ -14,7 +14,7 @@ const mountMiddleware = app => {
   app.use(session({ secret: "sompop" }));
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(express.static(path.join(__dirname, '../../client/build')))
+  // app.use(express.static(path.join(__dirname, '../../client/build')))
 };
 
 module.exports = mountMiddleware;

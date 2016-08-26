@@ -9,10 +9,10 @@ const mountAuthRoutes = app => {
     passport.authenticate('github', { failureRedirect: '/login' }),
     function(req, res) {
       console.log('ME HERE', req.user);
-      res.redirect('/');
+      res.redirect('/main');
     });
 
-  app.get('/', function(req, res){
+  app.get('/main', function(req, res){
     res.send(req.user)
   });
 }

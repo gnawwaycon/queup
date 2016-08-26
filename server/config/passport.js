@@ -7,7 +7,7 @@ passport.use(
   new GitHubStrategy({
     clientID: "6bc10986fdcb003b9e85",
     clientSecret: "2ad54a7701fd5a47333c14253f5c9814fd666218",
-    callbackURL: "https://queup3000.herokuapp.com/"
+    callbackURL: "http://queup3000.herokuapp.com/api/auth/callback"
   },
   function(accessToken, refreshToken, profile, done) {
 
