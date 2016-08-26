@@ -23,7 +23,7 @@ function enqueue(req, res) { //signing up for a queue
   .spread((waiting, inqueue) => {
     if(inqueue.count < waiting.capacity) {
       console.log(waiting);
-      sendMessage(`Hello ${waiting.dataValues.name} it is your spot in the line, please reply when you are done`, waiting.dataValues.userNumber),
+      sendMessage(`Hello ${waiting.dataValues.name} it is your spot in the line, please reply when you are done`, waiting.dataValues.userNumber);
       return Promise.all([waiting, Inqueue.create(waiting.dataValues)])
         .spread((waiting, created) => {
           return waiting.destroy();
