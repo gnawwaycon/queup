@@ -5,7 +5,7 @@ const mountAuthRoutes = require('../auth/authRoutes')
 const mountRoutes = (app, passport) => {
   mountUserRoutes(app);
   mountQueueRoutes(app);
-  mountAuthRoutes(app, passport)
+  mountAuthRoutes(app,passport)
 };
 
 module.exports = mountRoutes;
